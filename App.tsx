@@ -10,17 +10,31 @@
  */
 
 import React, { useState } from 'react';
-import { View, Animated, TouchableOpacity, Text } from 'react-native';
+import { View, Animated, TouchableOpacity, Text, Easing } from 'react-native';
 
 const App = () => {
 
-  const leftValue = useState(new Animated.Value(0))[0];
+  const heightValue = useState(new Animated.Value(1))[0];
+  const [select, setSelect] = useState(false);
+
   const moveBall = () => {
-    Animated.timing(leftValue, {
-      toValue: 100,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
+    if (!select){
+      Animated.timing(heightValue, {
+        toValue: 2,
+        duration: 700,
+        useNativeDriver: true,
+        easing: Easing.linear
+      }).start();
+      setSelect(true);
+    }else{
+      Animated.timing(heightValue, {
+        toValue: 1,
+        duration: 700,
+        useNativeDriver: true,
+        easing: Easing.linear
+      }).start();
+      setSelect(false);
+    }
   };
 
   return (
@@ -29,9 +43,8 @@ const App = () => {
         <Animated.View style={{
           width: 100,
           height: 100,
-          borderRadius: 100/2,
+          transform: [{scaleY: heightValue}],
           backgroundColor: 'red',
-          marginLeft: leftValue
         }}/>
         <TouchableOpacity onPress={moveBall}>
           <Text>Click Me!</Text>
